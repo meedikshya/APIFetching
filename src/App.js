@@ -4,6 +4,7 @@ import { Users } from "./components/users";
 import { Comments } from "./components/comments";
 import { Footer } from "./components/footer";
 import { Pagination } from "./components/pagination";
+import { Posts } from "./components/posts";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,41 +16,61 @@ function App(){
 
   const[users, setUsers] = useState([]);
   const[comments,setComments] = useState([]);
+  const[posts, setPosts] = useState([]);
+
 
   const[currentPage, setCurrentPage] = useState(1);
   const[todosPerPage] = useState(15);
 
+  const[currentcommentPage, setCurrentCommentPage] = useState(1);
+  const[commentsPerPage] =useState(15);
 
+  const[currentPostPage, setCurrentPostPage] = useState(1)
+  const[postsPerPage] = useState(10);
+
+
+    //todosss
   useEffect(() => {
     const fetchtodos = async () => {
     setLoading(true);
     const res = await axios.get('https://jsonplaceholder.typicode.com/todos');
     setTodos(res.data);
-    setUsers(res.data);
     setLoading(false);
     };
     fetchtodos();
   } , [])
 
+  //users
   useEffect(() => {
-    const fetchtodos = async () => {
+    const fetchusers = async () => {
     setLoading(true);
     const res = await axios.get('https://jsonplaceholder.typicode.com/users');
     setUsers(res.data);
     setLoading(false);
     };
-    fetchtodos();
+    fetchusers();
   } , [])
 
+  
+//comments
   useEffect(() => {
-    const fetchtodos = async () => {
+    const fetchcomments = async () => {
     setLoading(true);
     const res = await axios.get('https://jsonplaceholder.typicode.com/comments');
     setComments(res.data);
     setLoading(false);
     };
-    fetchtodos();
+    fetchcomments();
   } , [])
+
+  //posts
+  useEffect(()=> {
+    const fetchPosts = async () => {
+      const res = await axios.get('https://jsonplaceholder.typicode.com/posts');
+      setPosts(res.data);
+    };
+    fetchPosts();
+  }, [])
 
 
 
@@ -57,9 +78,29 @@ function App(){
   const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
   const currentTodo = todos.slice(indexOfFirstTodo, indexOfLastTodo);
 
-  //on clicking page numbers
+  const indexOfLastComment = currentcommentPage * commentsPerPage;
+  const indexOfFirstcomment = indexOfLastComment - commentsPerPage;
+  const currentComment = comments.slice(indexOfFirstcomment, indexOfLastComment)
+
+  const indexOfLastPost = currentPostPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPost = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+
+
+  //on clicking page numbers of todos
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
+  }
+
+  //of comment page
+  const paginateComment = (pageNumber) => {
+    setCurrentCommentPage(pageNumber);
+  }
+
+  //of posts page
+  const paginatePosts = (pageNumber) => {
+    setCurrentPostPage(pageNumber);
   }
 
   return (
@@ -67,14 +108,28 @@ function App(){
       <Router>
         <Routes>
           <Route path="/" element= { <Home /> }/>
-          <Route path="/Users" element= { <Users users={users} /> }/>
+          <Route path="/Users" element= { <Users users={users} loading={loading} comments={comments} /> }/>
           <Route path="/Todos"
            element= {<>
             <Todos todos={currentTodo} loading={loading} /> 
           <Pagination todosPerPage={todosPerPage} totalTodos={todos.length} paginate={paginate} />
            
            </>}/>
-          <Route path="/Comments" element= { <Comments comments={comments} /> }/>
+          <Route path="/Comments"
+           element= {<>
+             <Comments comments={currentComment} /> 
+          <Pagination commentsPerPage={commentsPerPage} totalComments={comments.length} paginateComment={paginateComment} />
+
+             </>}/>
+
+             <Route path="/Posts" element= {
+              <>
+               <Posts posts={currentPost}  />
+               <Pagination postsPerPage={postsPerPage}  totalPosts= {posts.length} paginatePosts={paginatePosts} />
+
+               </>
+                } 
+                />
         </Routes>
           <Footer />
       </Router>

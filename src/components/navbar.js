@@ -18,6 +18,8 @@ export const Navbarr = ( ) => {
             <Link to="/Users" className="navlink">Users</Link>
             <Link to="/Todos" className="navlink">ToDo</Link>
             <Link to="/Comments" className="navlink">Comments</Link>
+            <Link to="/Posts" className="navlink">Posts</Link>
+
 
           </Nav>
         </Container>
