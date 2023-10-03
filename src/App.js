@@ -18,7 +18,6 @@ function App(){
   const[comments,setComments] = useState([]);
   const[posts, setPosts] = useState([]);
 
-
   const[currentPage, setCurrentPage] = useState(1);
   const[todosPerPage] = useState(15);
 
@@ -46,6 +45,8 @@ function App(){
     setLoading(true);
     const res = await axios.get('https://jsonplaceholder.typicode.com/users');
     setUsers(res.data);
+    const userArray = (res.data);
+    console.log(userArray);
     setLoading(false);
     };
     fetchusers();
@@ -58,16 +59,21 @@ function App(){
     setLoading(true);
     const res = await axios.get('https://jsonplaceholder.typicode.com/comments');
     setComments(res.data);
+    const commentsArray = (res.data);
+    console.log(commentsArray);
     setLoading(false);
     };
     fetchcomments();
   } , [])
+
 
   //posts
   useEffect(()=> {
     const fetchPosts = async () => {
       const res = await axios.get('https://jsonplaceholder.typicode.com/posts');
       setPosts(res.data);
+      const postsArray = (res.data);
+      console.log(postsArray);
     };
     fetchPosts();
   }, [])
@@ -108,18 +114,22 @@ function App(){
       <Router>
         <Routes>
           <Route path="/" element= { <Home /> }/>
-          <Route path="/Users" element= { <Users users={users} loading={loading} comments={comments} /> }/>
+
+          <Route path="/Users" element= { <Users users={users} todos={todos} posts={posts}
+           loading={loading} comments={comments} 
+            /> }
+            />
+
           <Route path="/Todos"
            element= {<>
             <Todos todos={currentTodo} loading={loading} /> 
           <Pagination todosPerPage={todosPerPage} totalTodos={todos.length} paginate={paginate} />
-           
            </>}/>
+
           <Route path="/Comments"
            element= {<>
              <Comments comments={currentComment} /> 
           <Pagination commentsPerPage={commentsPerPage} totalComments={comments.length} paginateComment={paginateComment} />
-
              </>}/>
 
              <Route path="/Posts" element= {

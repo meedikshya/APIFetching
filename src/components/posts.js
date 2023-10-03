@@ -3,9 +3,6 @@ import { Navbarr } from './navbar';
 import { Footer } from './footer';
 
 export const Posts = ({posts}) => {
-
-
-
     return (
         <div className="commentPage">
           <Navbarr />
