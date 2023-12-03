@@ -111,7 +111,7 @@ function App(){
 
   return (
     <div className="App">
-      <Router>
+      <Router basename="APIfetching">
         <Routes>
           <Route path="/" element= { <Home /> }/>
 
@@ -123,7 +123,6 @@ function App(){
           <Route path="/Todos"
            element= {<>
             <Todos todos={currentTodo} loading={loading} /> 
-            <h1>dfghjkllkjhg</h1>
           <Pagination todosPerPage={todosPerPage} totalTodos={todos.length} paginate={paginate} />
            </>}/>
 
