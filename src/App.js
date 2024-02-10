@@ -111,7 +111,7 @@ function App(){
 
   return (
     <div className="App">
-      <Router basename="APIfetching">
+      <Router>
         <Routes>
           <Route path="/" element= { <Home /> }/>
 
